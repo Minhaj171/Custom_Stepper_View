@@ -104,8 +104,9 @@ public class RAdapter extends RecyclerView.Adapter<RAdapter.ViewHolder> {
                 binding.textView.setTextColor(Color.BLACK);
                 binding.ovalText.setBackgroundPaintColor(0xFF03A9F4);
             }else if (previousPosition < currentUserPosition){
+                binding.ovalText.setShowImage(true);
                 binding.ovalText.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), R.drawable.baseline_done_24, null));
-                binding.ovalText.setBackgroundPaintColor(0xFF03A9F4);
+                binding.ovalText.setBackgroundPaintColor(0xFFD3D3D3);
             }else {
                 binding.ovalText.setBackgroundPaintColor(0xFFD3D3D3);
             }
@@ -113,11 +114,11 @@ public class RAdapter extends RecyclerView.Adapter<RAdapter.ViewHolder> {
 
     }
 
-    public void setCurrentUserPosition(int position) {
+    public void setCurrentUserPosition(int position, Step step) {
         if (stepList.size() != 0 && position <= stepList.size()){
             currentUserPosition = position;
             previousPosition = position - 1;
-            notifyItemChanged(previousPosition);
+            notifyItemChanged(previousPosition, step);
             notifyDataSetChanged(); // Notify RecyclerView that data has changed
         }
     }
