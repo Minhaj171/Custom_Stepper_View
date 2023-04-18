@@ -1,9 +1,11 @@
 package com.example.mystepper;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
@@ -58,7 +60,7 @@ public class RAdapter extends RecyclerView.Adapter<RAdapter.ViewHolder> {
 
             StepPagerAdapter pagerAdapter = new StepPagerAdapter(mainActivity, stepList1);
             viewPager2.setAdapter(pagerAdapter);
-            iStepClick.onItemClick(position);
+            iStepClick.onItemClick(position, step);
             if (isLastPos){
                 holder.binding.viewLine.setVisibility(View.GONE);
             }
@@ -74,28 +76,13 @@ public class RAdapter extends RecyclerView.Adapter<RAdapter.ViewHolder> {
         return stepList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private ItemRowBinding binding;
-        public ViewHolder(@NonNull ItemRowBinding itemView) {
+
+        public ViewHolder(ItemRowBinding itemView) {
             super(itemView.getRoot());
             this.binding = itemView;
         }
-
-//        public void bindView(boolean isLastPos) {
-//            binding.ovalText.setText(String.valueOf(step.getId()));
-//            binding.textView.setText(step.getTitle());
-//           // binding.ovalText.setBackgroundPaintColor(0xFFD3D3D3);
-//            if (isFirstPos){
-//                binding.textView.setTextColor(Color.BLACK);
-//                binding.ovalText.setBackgroundPaintColor(0xFF03A9F4);
-//            }else {
-//                binding.ovalText.setBackgroundPaintColor(0xFFD3D3D3);
-//                //0xFF03A9F4
-//            }
-//
-
-//
-//        }
 
         public void bindView(boolean isCurrentPos, Step step){
             binding.ovalText.setText(String.valueOf(step.getId()));
@@ -111,17 +98,21 @@ public class RAdapter extends RecyclerView.Adapter<RAdapter.ViewHolder> {
                 binding.ovalText.setBackgroundPaintColor(0xFFD3D3D3);
             }
         }
-
     }
 
     public void setCurrentUserPosition(int position, Step step) {
-        if (stepList.size() != 0 && position <= stepList.size()){
-            currentUserPosition = position;
-            previousPosition = position - 1;
-            notifyItemChanged(previousPosition, step);
-            notifyDataSetChanged(); // Notify RecyclerView that data has changed
+        if (stepList.isEmpty() || position > stepList.size()) {
+            return;
         }
+        int previousUserPosition = currentUserPosition;
+        currentUserPosition = position;
+        previousPosition = position - 1;
+        if (previousUserPosition >= 0 && previousUserPosition < stepList.size()) {
+            notifyItemChanged(previousUserPosition);
+        }
+        notifyItemChanged(currentUserPosition);
     }
+
 
     public void setPreviousPosition(int position){
         notifyItemChanged(position);

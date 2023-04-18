@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements IStepClick, View.
     private RAdapter adapter;
     private  List<Step> stepList;
     private LinearLayoutManager layoutManager;
+    private Step step;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +53,9 @@ public class MainActivity extends AppCompatActivity implements IStepClick, View.
 
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(int position, Step step) {
         currentPos = position;
+        this.step = step;
     }
 
     @Override
@@ -62,14 +64,13 @@ public class MainActivity extends AppCompatActivity implements IStepClick, View.
             if (currentPos <= stepList.size()){
                 int position = currentPos + 1;
                 layoutManager.smoothScrollToPosition(binding.recyclerView, null, position);
-                adapter.setCurrentUserPosition(position);
-
+                adapter.setCurrentUserPosition(position, step);
             }
         }else if (v.getId() == R.id.btnPrevious){
             if (currentPos != 0){
                 int position = currentPos - 1;
                 layoutManager.smoothScrollToPosition(binding.recyclerView, null, position);
-                adapter.setCurrentUserPosition(position);
+                adapter.setCurrentUserPosition(position, step);
             }
         }
     }
